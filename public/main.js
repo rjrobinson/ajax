@@ -19,32 +19,38 @@
             if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 304)) {
                 console.log(xhr.status);
                 var body = document.getElementsByTagName("body")[0];
-                //
 
-                var heading = xhr.responseXML.getElementsByTagName("heading")[0].firstChild.nodeValue;
+                var json = JSON.parse(xhr.responseText);
+
+                var heading = json.heading;
                 var h2 = document.createElement("h2")
                 var h2Text = document.createTextNode(heading);
-                h2.appendChild(h2Text);
+
 
                 var list = document.createElement("ul");
-                var items = xhr.responseXML.getElementsByTagName("items")[0];
-                items = items.getElementsByTagName("item");
 
-                for (var i = items.length - 1; i >= 0; i--) {
-                    var item = item[i].firstChild.nodeValue;
+                var items = json.items;
+
+                for (var key in items) {
+                    var item = items[key];
                     var li = document.createElement("li");
                     var liText = document.createTextNode(item);
                     li.appendChild(liText);
                     list.appendChild(li);
                 };
+
+
+                h2.appendChild(h2Text);
                 body.appendChild(h2)
+                body.appendChild(list)
+
 
                 body.removeChild(link);
             }
         };
 
         // Open request.
-        xhr.open("GET", "ajax.xml", true);
+        xhr.open("GET", "ajax.json", true);
 
         // send request to server.
         xhr.send(null);
